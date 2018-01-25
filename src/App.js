@@ -11,14 +11,26 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            query: ''
+            value: ''
         };
 
      this.handleChange = this.handleChange.bind(this);
+     this.handleSubmit = this.handleSubmit.bind(this);
+     this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     handleChange(event) {
-        this.setState = ({query: event.target.value})
+        this.setState({value: event.target.value});
+    }
+
+    handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            return this.handleSubmit()
+        }
+    }
+
+    handleSubmit() {
+        console.log('this.state', this.state.value)
     }
 
     render() {
@@ -29,12 +41,13 @@ class App extends Component {
                 <FormGroup>
                     <InputGroup>
                         <FormControl type="text"
-                                     placeholder="Search for an artist... "
-                                     query={this.state.query}
+                                     placeholder="Search for an Artist"
+                                     value={this.state.value}
                                      onChange={this.handleChange}
+                                     onKeyPress={this.handleKeyPress}
                         />
 
-                        <InputGroup.Addon>
+                        <InputGroup.Addon onClick={this.handleSubmit}>
                             <Glyphicon glyph="search"></Glyphicon>
                         </InputGroup.Addon>
 
