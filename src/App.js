@@ -15,7 +15,7 @@ class App extends Component {
         };
 
      this.handleChange = this.handleChange.bind(this);
-     this.handleSubmit = this.handleSubmit.bind(this);
+     this.search = this.search.bind(this);
      this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
@@ -25,12 +25,14 @@ class App extends Component {
 
     handleKeyPress(event) {
         if (event.key === 'Enter') {
-            return this.handleSubmit()
+            return this.search();
         }
     }
 
-    handleSubmit() {
-        console.log('this.state', this.state.value)
+    search() {
+        const BASE_URL = 'https://api.spotify.com/v1/search?';
+        const FETCH_URL = `${BASE_URL}q=${this.state.value}&type=artist&limit=1`;
+        console.log('FETCH_URL', FETCH_URL);
     }
 
     render() {
@@ -47,7 +49,7 @@ class App extends Component {
                                      onKeyPress={this.handleKeyPress}
                         />
 
-                        <InputGroup.Addon onClick={this.handleSubmit}>
+                        <InputGroup.Addon onClick={this.search}>
                             <Glyphicon glyph="search"></Glyphicon>
                         </InputGroup.Addon>
 
