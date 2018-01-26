@@ -5,13 +5,16 @@ import {FormGroup,
         Glyphicon
 } from 'react-bootstrap';
 
+import Profile from './Profile';
+
 import './App.css';
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: ''
+            query: '',
+            artist: null
         };
 
      this.handleChange = this.handleChange.bind(this);
@@ -20,7 +23,7 @@ class App extends Component {
     }
 
     handleChange(event) {
-        this.setState({value: event.target.value});
+        this.setState({query: event.target.value});
     }
 
     handleKeyPress(event) {
@@ -31,8 +34,26 @@ class App extends Component {
 
     search() {
         const BASE_URL = 'https://api.spotify.com/v1/search?';
-        const FETCH_URL = `${BASE_URL}q=${this.state.value}&type=artist&limit=1`;
-        console.log('FETCH_URL', FETCH_URL);
+        const FETCH_URL = `${BASE_URL}q=${this.state.query}&type=artist&limit=1`;
+
+        let accessToken = 'BQDLE7EM8TDKH0Kao08H3AF68sOKO39b8PdstxERZyNB3bRHLxsK9NTSYWbPjfpj7ZfhLhZcI7-mnws36_rF5In1uH5WCNKMqBY5-vRu3dn1KqkXSkLcWFtQN03Ui3DotECnjAhs09OWYUpGX5V1iKtvSBfe7A&refresh_token=AQCUOE4_MOLn4NiH92CR98PaHMn0rEpY2Fwu5D2Acj_IlfN9MZG7IUE-Nk5_QKnyP8FLEcprKbGLmMpJA9eJZd5q35H3lq6433s2jA4tSFESOelebhXZTj8Fli1ZZ1DPoMw';
+
+        let response = {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            },
+
+            mode: 'cors',
+            cache: 'default'
+        };
+
+        fetch(FETCH_URL, response)
+            .then(response => response.json())
+            .then(json => {
+                const artist = json.artists.items[0];
+                this.setState({artist});
+            })
     }
 
     render() {
@@ -44,7 +65,7 @@ class App extends Component {
                     <InputGroup>
                         <FormControl type="text"
                                      placeholder="Search for an Artist"
-                                     value={this.state.value}
+                                     value={this.state.query}
                                      onChange={this.handleChange}
                                      onKeyPress={this.handleKeyPress}
                         />
@@ -57,10 +78,9 @@ class App extends Component {
 
                 </FormGroup>
 
-                <div className="profile">
-                    <div>Artist picture</div>
-                    <div>Artist name</div>
-                </div>
+                <Profile
+                    artist={this.state.artist}
+                />
 
                 <div className="Gallery">
                     Gallery
