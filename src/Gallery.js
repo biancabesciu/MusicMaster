@@ -8,12 +8,11 @@ class Gallery extends Component {
             playingUrl: '',
             audio: null,
             playing: false,
-            available_market: ''
         };
     }
 
-    playAudio(previewUrl, market) {
-        let audio = new Audio (previewUrl, market);
+    playAudio(previewUrl) {
+        let audio = new Audio (previewUrl);
         //if track it's not playing
         //make it play
         if (!this.state.playing) {
@@ -21,7 +20,6 @@ class Gallery extends Component {
             this.setState ({
                 playing: true,
                 playingUrl: previewUrl,
-                available_market: market,
                 audio: audio
             })
         // if track is already playing
@@ -40,7 +38,6 @@ class Gallery extends Component {
                 this.setState({
                     playing: true,
                     playingUrl: previewUrl,
-                    available_market: market,
                     audio:audio
                 })
             }
@@ -56,9 +53,17 @@ class Gallery extends Component {
                 return (
                     <div key={k}
                          className="track"
-                         onClick={() => this.playAudio(track.preview_url, track.available_markets)}
+                         onClick={() => this.playAudio(track.preview_url)}
                     >
                         <img src={trackImg} className="track-img" alt="track" />
+                        <div className="track-play">
+                            <div className="track-play-inner">
+
+                                {
+                                    this.state.playingUrl === track.preview_url ? <span>| |</span>: <span>&#9654;</span>
+                                }
+                            </div>
+                        </div>
                         <p className="track-text">{track.name}</p>
 
                     </div>
