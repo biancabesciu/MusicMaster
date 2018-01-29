@@ -39,7 +39,7 @@ class App extends Component {
         let FETCH_URL = `${BASE_URL}q=${this.state.query}&type=artist&limit=1`;
         const ALBUM_URL = 'https://api.spotify.com/v1/artists/';
 
-        let accessToken= 'BQDCNUvmIBWq_9oADNGSvz-lR9KpGbzhpoFqH76iHeTAywLHHYKN7txHGHwvIbCPaiyAJDW9L7kErC3OBs9i_QZuXzFyK6dmfMCDotykaVAOf9KFTHrO0PhlIh9g0mkGkRl3F3Mzx1p1xuRmfCcvKxfhITbisQ&refresh_token=AQDyFzOecJw2u00NAKhMtMK7hDBDHunaORL8HFhKdrXk-gI-1_9-V7GRt-yScHtYn5ZegyQPfnxljDnDdfrkqX48WdQhuHosaZba9ynty602iVz7hDzCC3CO8q-gjJm80Jc';
+        let accessToken= 'BQDDFI0PKt57Y9i8cySHxW3t5JunJQ2eHJ3NxPEVd13Zy0KfAp24-1xYd47hxhQHe-j3CLGOQQ9A_HpxyCLwUAOvrtKpeidDG0yswm-8KsRamgw_RXccwr5SB7BzU56HdZKZBhsRmcf8St9JP4WFzTxxJIAHmQ&refresh_token=AQC-bR9i_BOdyiYqHpO69jRTZQNg9RofTC1VYXiA8ERKQE1zjmOLWdfAvgYHCeHxdD3EwfZESr064-6hxyEkivE6ojrEp9745tBmLdybZKN_VXMpX0T-3B0vFb6Rh69UAaE';
 
         let response = {
             method: 'GET',
@@ -57,7 +57,7 @@ class App extends Component {
                 const artist = json.artists.items[0];
                 this.setState({artist});
 
-                FETCH_URL = `${ALBUM_URL}${artist.id}/top-tracks?country=NL&`;
+                FETCH_URL = `${ALBUM_URL}${artist.id}/top-tracks?country=NL&?market=US`;
                 fetch(FETCH_URL,response)
                     .then(response => response.json())
                     .then(json => {
