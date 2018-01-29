@@ -6,6 +6,7 @@ import {FormGroup,
 } from 'react-bootstrap';
 
 import Profile from './Profile';
+import Gallery from './Gallery';
 
 import './App.css';
 
@@ -14,7 +15,8 @@ class App extends Component {
         super(props);
         this.state = {
             query: '',
-            artist: null
+            artist: null,
+            tracks: []
         };
 
      this.handleChange = this.handleChange.bind(this);
@@ -34,9 +36,10 @@ class App extends Component {
 
     search() {
         const BASE_URL = 'https://api.spotify.com/v1/search?';
-        const FETCH_URL = `${BASE_URL}q=${this.state.query}&type=artist&limit=1`;
+        let FETCH_URL = `${BASE_URL}q=${this.state.query}&type=artist&limit=1`;
+        const ALBUM_URL = 'https://api.spotify.com/v1/artists/';
 
-        let accessToken = 'BQDLE7EM8TDKH0Kao08H3AF68sOKO39b8PdstxERZyNB3bRHLxsK9NTSYWbPjfpj7ZfhLhZcI7-mnws36_rF5In1uH5WCNKMqBY5-vRu3dn1KqkXSkLcWFtQN03Ui3DotECnjAhs09OWYUpGX5V1iKtvSBfe7A&refresh_token=AQCUOE4_MOLn4NiH92CR98PaHMn0rEpY2Fwu5D2Acj_IlfN9MZG7IUE-Nk5_QKnyP8FLEcprKbGLmMpJA9eJZd5q35H3lq6433s2jA4tSFESOelebhXZTj8Fli1ZZ1DPoMw';
+        let accessToken= 'BQDCNUvmIBWq_9oADNGSvz-lR9KpGbzhpoFqH76iHeTAywLHHYKN7txHGHwvIbCPaiyAJDW9L7kErC3OBs9i_QZuXzFyK6dmfMCDotykaVAOf9KFTHrO0PhlIh9g0mkGkRl3F3Mzx1p1xuRmfCcvKxfhITbisQ&refresh_token=AQDyFzOecJw2u00NAKhMtMK7hDBDHunaORL8HFhKdrXk-gI-1_9-V7GRt-yScHtYn5ZegyQPfnxljDnDdfrkqX48WdQhuHosaZba9ynty602iVz7hDzCC3CO8q-gjJm80Jc';
 
         let response = {
             method: 'GET',
@@ -53,7 +56,17 @@ class App extends Component {
             .then(json => {
                 const artist = json.artists.items[0];
                 this.setState({artist});
-            })
+
+                FETCH_URL = `${ALBUM_URL}${artist.id}/top-tracks?country=NL&`;
+                fetch(FETCH_URL,response)
+                    .then(response => response.json())
+                    .then(json => {
+                        console.log('artists top tracks', json);
+                        const tracks = json.tracks;
+                        this.setState({tracks})
+                    })
+
+            });
     }
 
     render() {
@@ -75,19 +88,26 @@ class App extends Component {
                         </InputGroup.Addon>
 
                     </InputGroup>
-
                 </FormGroup>
+                {
+                    this.state.artist !== null
+                    ?
+                        <div>
+                            <Profile artist={this.state.artist}/>
 
-                <Profile
-                    artist={this.state.artist}
-                />
+                            <Gallery tracks={this.state.tracks}/>
+                        </div>
 
-                <div className="Gallery">
-                    Gallery
-                </div>
+                    : <div></div>
+                }
+
             </div>
     );
   }
 }
 
 export default App;
+
+
+
+/*F*/
